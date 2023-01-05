@@ -62,8 +62,8 @@ module.exports.getSingleProduct = async (req, res, next) => {
 
 module.exports.postProduct = async (req, res, next) => {
     try{
+        console.log(req.file)
         const products = await new Product({
-            img: req.body.img,
             title:req.body.title,
             text: req.body.text,
             brand_id: req.body.brand_id,
@@ -75,6 +75,7 @@ module.exports.postProduct = async (req, res, next) => {
         await products.save()
         await res.status(200).send({ success: true, products: products })
     }catch(err){
+        console.log(err)
         res.status(404).send(err)
     }
 }
