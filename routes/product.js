@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/')
     },
     filename:function(req, file, cb) {
-        cb(null, new Date().toISOString() + file.name)
+        cb(null, new Date().toISOString() + file.originalname)
     }
 })
 
@@ -26,10 +26,11 @@ const upload = multer({ storage: storage,
     },
     // fileFilter: fileFilter
 })
-router.post("/", upload.single("productImage"), auth, admin, product.postProduct)
+router.delete("/", product.deleteProducts)
+router.post("/", upload.single("file"), auth, admin, product.postProduct)
 router.delete("/:id", product.deleteProduct)
 router.get("/search", product.getSearchedProducts)
-router.put("/:id", product.updateProduct)
+router.put("/:id", product.updateProduct) 
 router.get("/all", product.getAllProduct)
 router.get("/:id",  product.getSingleProduct)
 router.get("/all/admin", product.getAdminProducts)

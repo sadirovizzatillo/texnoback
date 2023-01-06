@@ -41,14 +41,14 @@ module.exports.getSearchedProducts = async (req, res) => {
 
 module.exports.getSingleProduct = async (req, res, next) => {
     try{
-        const pageNumber = req.body.page ?? 1
-        const pageSize = req.body.limit ?? 3
+        // const pageNumber = req.body.page ?? 1
+        // const pageSize = req.body.limit ?? 3
         const products = await Product.find({ _id: req.params.id });
         const brand = await Brand.find({ _id: products[0].brand_id })
         const reviews = await Review.find({ product_id: req.params.id })
         .populate("user_id")
-        .skip((pageNumber - 1) * pageSize)
-        .limit(pageSize)
+        // .skip((pageNumber - 1) * pageSize)
+        // .limit(pageSize)
         if(!products){
             res.status(404).send("Bunday Product topilmadi!");
             return
@@ -62,7 +62,6 @@ module.exports.getSingleProduct = async (req, res, next) => {
 
 module.exports.postProduct = async (req, res, next) => {
     try{
-        console.log(req.file)
         const products = await new Product({
             title:req.body.title,
             text: req.body.text,
@@ -82,7 +81,6 @@ module.exports.postProduct = async (req, res, next) => {
 
 module.exports.updateProduct = async (req, res, next) => {
     try{
-        console.log(req.body)
         const products = await  Product.findOneAndUpdate({ _id: req.params.id }, {
             img: req.body.img,
             title:req.body.title,
@@ -107,6 +105,14 @@ module.exports.deleteProduct = async (req, res, next) => {
     }
 }
 
+module.exports.deleteProducts = async (req, res, next) => {
+    try{
+        const products = await Product.deleteMany();
+        await res.status(200).send({ success: true, products: products })
+    }catch(err){
+        res.status(404).send(err)
+    }
+}
 
 
 
