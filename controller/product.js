@@ -29,11 +29,15 @@ module.exports.getAdminProducts = async (req, res) => {
 
 module.exports.getSearchedProducts = async (req, res) => {
     try{
-        const query = { title: req.query.name };
-        
-        const products = await Product.find(query)
-        
-        await res.status(200).send({ success: true, products: products })
+        const arrPoruducts = []
+        const name = await req.query.name        
+        const products = await Product.find();
+        await products.forEach(p => {
+            if(p.title.toUpperCase().includes(name.toUpperCase())){
+                arrPoruducts.push(p)
+            }
+        })        
+        await res.status(200).send({ success: true, products: arrPoruducts })
     }catch(err){
         res.status(404).send(err)
     }
