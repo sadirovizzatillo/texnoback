@@ -9,7 +9,7 @@ const purchaseSchema = new mongoose.Schema({
     purchased: [
         {
             product_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
-            quantity: {type: Number, default: 1}
+            quantity: { type: Number }
         }   
     ]
 },{ timestamps:true });
