@@ -4,9 +4,17 @@ const { Review } = require("../model/review");
 
 module.exports.getAllProduct = async (req, res) => {
     try{
-        const products = await Product.find()
-        
-        await res.status(200).send({ success: true, products: products })
+        const products = await Product.find().populate("category");
+        const reviews = await Review.find()
+        .select("product_id rate user_id");
+        const productWithReviews = products.map(product => {
+            const review = reviews.find(review => review.product_id.equals(product._id));
+            return{
+                ...product._doc,
+                reviews:review
+            }
+        })
+        await res.status(200).send({ success: true, products: productWithReviews })
     }catch(err){
         res.status(404).send(err)
     }
@@ -72,7 +80,8 @@ module.exports.postProduct = async (req, res, next) => {
             brand_id: req.body.brand_id,
             quantity:req.body.quantity,
             price: req.body.price,
-            productImage:req.file.path
+            productImage:req.file.path,
+            category:req.body.category
         })
         
         await products.save()
@@ -91,7 +100,8 @@ module.exports.updateProduct = async (req, res, next) => {
             text: req.body.text,
             brand_id: req.body.brand_id,
             quantity:req.body.quantity,
-            price: req.body.price
+            price: req.body.price,
+            category:req.body.category
         })  
         await res.status(200).send({ success: true, products: products })
     }catch(err){
