@@ -81,7 +81,8 @@ module.exports.postProduct = async (req, res, next) => {
             quantity:req.body.quantity,
             price: req.body.price,
             productImage:req.file.path,
-            category:req.body.category
+            category:req.body.category,
+            subCategory:req.body.subCategory
         })
         
         await products.save()
@@ -101,7 +102,8 @@ module.exports.updateProduct = async (req, res, next) => {
             brand_id: req.body.brand_id,
             quantity:req.body.quantity,
             price: req.body.price,
-            category:req.body.category
+            category:req.body.category,
+            subCategory:req.body.subCategory
         })  
         await res.status(200).send({ success: true, products: products })
     }catch(err){
