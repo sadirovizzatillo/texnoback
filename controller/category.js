@@ -17,10 +17,24 @@ module.exports.all = async (req, res, next) => {
 module.exports.getRelatedSubCategories = async (req, res, next) => {
     try{
         const subcategory = await SubCategory.find({ parentCategoryId: req.params.id })
+        const category = await Category.find({ _id: req.params.id })
         if(!subcategory){
             await res.status(404).send("Bunday id category topilmadi!")
         }
-        res.status(200).send({success:true, subcategories:subcategory})
+        res.status(200).send({success:true, subcategories:subcategory, category: category })
+    }catch(err){
+        res.status(404).send(err)
+    }
+} 
+
+module.exports.getSubCategoryProducts = async (req, res, next) => {
+    try{
+        const products = await Product.find({ subCategory: req.params.id })
+        const subcategory = await SubCategory.find({ _id: req.params.id })
+        if(!products){
+            await res.status(404).send("Bunday id ga oid product topilmadi!")
+        }
+        res.status(200).send({success:true, products:products, category: subcategory })
     }catch(err){
         res.status(404).send(err)
     }
