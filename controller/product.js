@@ -20,6 +20,16 @@ module.exports.getAllProduct = async (req, res) => {
     }
 }
 
+module.exports.getAdviceProducts = async (req, res) => {
+    try{
+        const adviceProducts = await Product.find({ category: req.params.id });
+
+        await res.status(200).send({ success: true, products: adviceProducts })
+    }catch(err){
+        res.status(404).send(err)
+    }
+}
+
 module.exports.getAdminProducts = async (req, res) => {
     try{
         const pageNumber = req.query.page ?? 1

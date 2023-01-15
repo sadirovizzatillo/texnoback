@@ -42,7 +42,7 @@ module.exports.getSubCategoryProducts = async (req, res, next) => {
 
 module.exports.categoryProducts = async (req, res, next) => {
     try{
-        const products = await Product.find({ category: req.params.id })     
+        const products = await Product.find({ category: req.params.id });    
         if(!products){
             await res.status(404).send("Bunday id category topilmadi!")
         }   

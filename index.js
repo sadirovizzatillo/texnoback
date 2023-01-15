@@ -26,7 +26,7 @@ app.use("/api/subcategories", subcategory);
 
 
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
     console.log(`${port} portga ulandi`)
