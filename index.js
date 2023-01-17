@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 var cors = require("cors")
-const { auth, product, review, brand, purchase, category, subcategory } = require("./routes")
+const { auth, product, review, brand, purchase, category, subcategory, subminicategory } = require("./routes")
 app.use(cors())
 const mongoose  = require("mongoose")
 mongoose.set('strictQuery', true);
@@ -23,6 +23,7 @@ app.use("/api/brands", brand);
 app.use("/api/categories", category);
 app.use("/api/purchase", purchase);
 app.use("/api/subcategories", subcategory);
+app.use("/api/subminicategories", subminicategory);
 
 
 
