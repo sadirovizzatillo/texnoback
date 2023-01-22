@@ -22,8 +22,22 @@ module.exports.getAllProduct = async (req, res) => {
 
 module.exports.getAdviceProducts = async (req, res) => {
     try{
-        const adviceProducts = await Product.find({ category: req.params.id });
-
+        const product = await Product.find({ _id: req.params.id });
+        const subcategory = await product[0].subCategory
+        const category = await product[0].category
+        var adviceProducts = null
+        
+        if(subcategory){
+            const adviceProductss = await Product.find({ subCategory: subcategory });
+            adviceProducts = adviceProductss
+        }
+        else if(category){
+            const adviceProductss = await Product.find({ category: category })
+            adviceProducts = adviceProductss
+        }else{
+            const products = await Product.find()
+            adviceProducts = products
+        }
         await res.status(200).send({ success: true, products: adviceProducts })
     }catch(err){
         res.status(404).send(err)

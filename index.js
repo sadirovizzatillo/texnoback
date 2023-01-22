@@ -1,13 +1,14 @@
 const express = require("express")
 const app = express()
 var cors = require("cors")
+
 const { auth, product, review, brand, purchase, category, subcategory, subminicategory } = require("./routes")
 app.use(cors())
 const mongoose  = require("mongoose")
 mongoose.set('strictQuery', true);
+const url = "mongodb+srv://Izzatillo:a-z123456789@cluster0.x3i3lpc.mongodb.net/texnomart?retryWrites=true&w=majority"
 
-
-mongoose.connect("mongodb+srv://Izzatillo:a-z123456789@cluster0.x3i3lpc.mongodb.net/texnomart?retryWrites=true&w=majority", { useNewUrlParser: true,
+mongoose.connect(url, { useNewUrlParser: true,
 useUnifiedTopology: true }).then(() => {
     console.log("mongo db ga ulandi")
 }).catch((err) => {

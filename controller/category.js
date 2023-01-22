@@ -54,19 +54,17 @@ module.exports.categoryProducts = async (req, res, next) => {
 
 module.exports.categoryWithSubcategories = async (req, res, next) => {
     try{
-        // const categories = await Category.find() 
-        // const subcategories = await SubCategory.find() 
-        const categoryWithSubs = await Category.aggregate([
+        const data = await Category.aggregate([
             {
-                $lookup:{
-                    from:"SubCategory",
-                    localField:"_id",
-                    foreignField:"parentCategoryId",
-                    as:"subcategories"
-                }
-            },
-        ]) 
-        res.status(200).send({success:true, categories:categoryWithSubs})
+              $lookup: {
+                from: SubCategory.collection.name,
+                localField: '_id',
+                foreignField: 'parentCategoryId',
+                as: 'subcategories'
+              }
+            }
+          ]);
+        await res.status(200).send({success:true, categories:data})
     }catch(err){
         res.status(404).send(err)
     }
