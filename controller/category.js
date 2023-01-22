@@ -1,6 +1,7 @@
 const {  Category } = require("../model/category")
 const { Product } = require("./product")
 const { SubCategory } = require("./subcategory")
+const { SubMiniCategory } = require("./subminicategory")
 
 
 
@@ -56,14 +57,25 @@ module.exports.categoryWithSubcategories = async (req, res, next) => {
     try{
         const data = await Category.aggregate([
             {
-              $lookup: {
-                from: SubCategory.collection.name,
-                localField: '_id',
-                foreignField: 'parentCategoryId',
-                as: 'subcategories'
-              }
-            }
-          ]);
+                $lookup: {
+                    from: SubCategory.collection.name,
+                    localField: '_id',
+                    foreignField: 'parentCategoryId',
+                    as: 'subcategories'
+                }
+            },
+        ])
+        // const mini = await SubCategory.aggregate([
+        //     { 
+        //         $lookup: { 
+        //             from: SubMiniCategory.collection.name, 
+        //             localField: '_id', 
+        //             foreignField: 'parentSubCategoryId', 
+        //             as: 'subminicategories' 
+        //         } 
+        //     }
+        // ])
+        // console.log(mini)
         await res.status(200).send({success:true, categories:data})
     }catch(err){
         res.status(404).send(err)
