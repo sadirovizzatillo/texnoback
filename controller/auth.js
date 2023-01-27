@@ -65,6 +65,15 @@ module.exports.users = async (req, res, next) => {
 }
 
 
+module.exports.getAdminStatiksUser = async (req, res, next) => {
+    try {
+        const users = (await Auth.find({ isAdmin: { $ne: true } })).length
+        await res.json({ success: true, user: users })
+    } catch (err) {
+        res.status(404).send(err)
+    }
+}
+
 module.exports.updateUser = async (req, res, next) => {
     try {
         const user = await Auth.findOneAndUpdate({ _id:req.params.id }, {

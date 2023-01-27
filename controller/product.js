@@ -59,6 +59,15 @@ module.exports.getAdminProducts = async (req, res) => {
     }
 }
 
+module.exports.getAdminStatiksProducts = async (req, res, next) => {
+    try {
+        const products = (await Product.find()).length
+        await res.json({ success: true, products: products })
+    } catch (err) {
+        res.status(404).send(err)
+    }
+}
+
 module.exports.getSearchedProducts = async (req, res) => {
     try{
         const arrPoruducts = []

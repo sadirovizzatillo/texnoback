@@ -9,6 +9,7 @@ router.get("/:id", auth.me);
 router.post("/login", auth.login);
 router.put("/updateUser/:id", auth.updateUser)
 router.delete("/deleteUser/:id", auth.deleteUser)
+router.get("/users/statistic", auth.getAdminStatiksUser)
 
 
 module.exports = router 
