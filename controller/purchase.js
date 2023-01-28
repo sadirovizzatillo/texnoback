@@ -35,7 +35,6 @@ module.exports.postPurchase =  async (req, res) => {
                 },
             });
             if(!purchaseStatistic){
-                console.log(new Date().getDate())
                 const purchaseStatistics = await new PurchaseStatistics({
                     quantity: realQuantity,
                     currentDate: new Date().getDate()

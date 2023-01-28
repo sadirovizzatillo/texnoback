@@ -26,8 +26,11 @@ const upload = multer({ storage: storage,
     },
     // fileFilter: fileFilter
 })
+
+router.get("/main/category", product.mainRelatedProduct)
 router.get("/statistics", product.getAdminStatiksProducts)
 router.get("/adviceproducts/:id", product.getAdviceProducts) 
+router.get("/bestseller", product.getBestSellers)
 router.delete("/", product.deleteProducts)
 router.post("/", upload.single("file"), auth, admin, product.postProduct)
 router.delete("/:id", product.deleteProduct)

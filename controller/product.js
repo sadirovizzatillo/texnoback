@@ -1,6 +1,8 @@
 const { Brand } = require("../model/brand");
 const { Product } = require("../model/product");
+const { Purchase } = require("../model/purchase");
 const { Review } = require("../model/review");
+const { Category } = require("../model/category");
 
 module.exports.getAllProduct = async (req, res) => {
     try{
@@ -163,6 +165,58 @@ module.exports.deleteProducts = async (req, res, next) => {
     }
 }
 
-
-
-exports.Product = Product
+module.exports.getBestSellers = async (req, res, next) => {
+    try{
+        const topProducts = []
+        const products = await Purchase.aggregate([
+            {
+                $group: {
+                    _id: "$purchased.product_id",
+                    count: {$sum: 1}
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            },
+            {
+                $limit: 6
+            }
+        ]);
+        
+        await products.forEach(item => {
+            topProducts.push(item._id[0])
+        })
+        const topProduct = await Product.find(
+            { 
+                _id: { $in: [...topProducts] } 
+            })
+            .select("_id text title price productImage")
+            await res.status(200).send({ success: true, bestseller: topProduct })
+        }catch(err){
+            res.status(404).send(err)
+        }
+    }
+    
+    module.exports.mainRelatedProduct = async (req, res, next) => {
+        try{            
+            const category = await Category.aggregate([
+                {
+                    $lookup: {
+                        from: Product.collection.name,
+                        localField: '_id',
+                        foreignField: 'category',
+                        as: 'products'
+                    }
+                },
+            ]);
+            await res.status(200).send({ success: true, products: category })
+        }catch(err){
+            res.status(404).send(err)
+        }
+    }
+    
+    
+    
+    exports.Product = Product
