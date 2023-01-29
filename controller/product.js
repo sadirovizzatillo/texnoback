@@ -3,6 +3,7 @@ const { Product } = require("../model/product");
 const { Purchase } = require("../model/purchase");
 const { Review } = require("../model/review");
 const { Category } = require("../model/category");
+const cloudinary = require("../utils/cloudinary")
 
 module.exports.getAllProduct = async (req, res) => {
     try{
@@ -109,17 +110,27 @@ module.exports.getSingleProduct = async (req, res, next) => {
 
 module.exports.postProduct = async (req, res, next) => {
     try{
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder:"products"
+        })
+
+        // Create Product
         const products = await new Product({
             title:req.body.title,
             text: req.body.text,
             brand_id: req.body.brand_id,
             quantity:req.body.quantity,
             price: req.body.price,
-            productImage:req.file.path,
+            productImage:{
+                public_id: result.public_id,
+                url: result.secure_url
+            },
             category:req.body.category,
-            subCategory:req.body.subCategory
+            subCategory:req.body.subCategory,
+            subMiniCategory: req.body.subMiniCategory
         })
-        
+
+        // Save Product
         await products.save()
         await res.status(200).send({ success: true, products: products })
     }catch(err){
@@ -210,6 +221,9 @@ module.exports.getBestSellers = async (req, res, next) => {
                         as: 'products'
                     }
                 },
+                {
+                    $limit:8
+                }
             ]);
             await res.status(200).send({ success: true, products: category })
         }catch(err){

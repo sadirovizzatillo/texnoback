@@ -33,14 +33,20 @@ const productSchema = new mongoose.Schema({
         required:true,
         ref:"SubCategory"
     },
-    subCategory:{
+    subMiniCategory:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:"SubMiniCategory"
     },
     productImage:{
-        type:String,
-        required:true
+        public_id:{
+            type:String,
+            required:true
+        },
+        url:{
+            type:String,
+            required:true
+        }
     }
 }, { timestamps: true })
 
